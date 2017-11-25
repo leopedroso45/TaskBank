@@ -11,10 +11,12 @@ package bancodetarefas;
  */
 public class Principal extends javax.swing.JFrame {
 
+    private ColecaoTarefas colecao;
     /**
      * Creates new form Principal
      */
-    public Principal() {
+    public Principal(ColecaoTarefas c) {
+        this.colecao = c;
         initComponents();
     }
 
@@ -69,6 +71,11 @@ public class Principal extends javax.swing.JFrame {
         bImportar.setText("Importar arquivo de tarefas");
 
         bExportar.setText("Exportar arquivo de tarefas");
+        bExportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExportarActionPerformed(evt);
+            }
+        });
 
         bExibir.setText("Exibir Tarefas já cadastradas");
 
@@ -118,9 +125,13 @@ public class Principal extends javax.swing.JFrame {
 
     private void bCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCadastrarActionPerformed
         // TODO add your handling code here:
-        TelaCadastrar telacadastro = new TelaCadastrar();
+        TelaCadastrar telacadastro = new TelaCadastrar(colecao);
         telacadastro.setVisible(true);
     }//GEN-LAST:event_bCadastrarActionPerformed
+
+    private void bExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExportarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bExportarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,9 +161,10 @@ public class Principal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        ColecaoTarefas c = new ColecaoTarefas();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                new Principal(c).setVisible(true);
             }
         });
     }

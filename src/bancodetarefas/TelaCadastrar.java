@@ -5,9 +5,7 @@
  */
 package bancodetarefas;
 
-import com.sun.istack.internal.logging.Logger;
 import static java.lang.Thread.sleep;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,10 +13,12 @@ import javax.swing.JOptionPane;
  */
 public class TelaCadastrar extends javax.swing.JFrame {
 
+    private ColecaoTarefas colecao;
     /**
      * Creates new form TelaCadastrar
      */
-    public TelaCadastrar() {
+    public TelaCadastrar(ColecaoTarefas c) {
+        this.colecao = c;
         initComponents();
     }
 
@@ -151,14 +151,13 @@ public class TelaCadastrar extends javax.swing.JFrame {
         String descricao = recebeDescricao.getText();
         String genero = recebeGenero.getText();
         String caminho = recebeCaminho.getText();
-        ColecaoTarefas colecao = new ColecaoTarefas();
         try {
-            colecao.addTarefa(new Tarefa(nome, descricao, genero, caminho));
+            this.colecao.addTarefa(new Tarefa(nome, descricao, genero, caminho));
             new Thread() {
                 public void run() {
                     for (int i = 0; i < 101; i++) {
                         try {
-                            sleep(100);
+                            sleep(40);
                             jProgressBar1.setValue(i);
                             if (jProgressBar1.getValue() <= 25) {
                                 lblCarregando.setText("Carregando Sistema...");
@@ -168,11 +167,7 @@ public class TelaCadastrar extends javax.swing.JFrame {
                                 lblCarregando.setText("Carregando nada de mais...");
                             } else {
                                 lblCarregando.setText("Cadastro concluído com sucesso!");
-                                for (int j = 0; i <= 1; i++) {
-                                    if (j == 1) {
-                                        dispose();
-                                    }
-                                }
+                                dispose();
                             }
                         } catch (InterruptedException ex) {
 
@@ -186,40 +181,6 @@ public class TelaCadastrar extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastrar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastrar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastrar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastrar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaCadastrar().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
