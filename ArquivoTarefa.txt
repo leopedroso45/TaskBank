@@ -1,0 +1,15 @@
+Nanatsu no Taizai
+Anime de aventura
+Aventura/Ação
+C://animes//nanatsu.mkv
+
+Naruto
+Anime de luta
+Ação
+C://animes//naruto.mp4
+
+Matrix
+Filme de ação
+Ação
+C://filmes//matrix.avi
+
