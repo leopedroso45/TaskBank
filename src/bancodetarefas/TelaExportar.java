@@ -5,15 +5,22 @@
  */
 package bancodetarefas;
 
+import java.io.IOException;
+import static java.lang.Thread.sleep;
+
 /**
  *
  * @author 161150960
  */
 public class TelaExportar extends javax.swing.JFrame {
+
+    private ColecaoTarefas colecao;
+
     /**
      * Creates new form TelaExportar
      */
-    public TelaExportar() {
+    public TelaExportar(ColecaoTarefas c) {
+        this.colecao = c;
         initComponents();
     }
 
@@ -29,15 +36,26 @@ public class TelaExportar extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         recebeNomeDoArquivo = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        baraDePr = new javax.swing.JProgressBar();
+        lblCarregando = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Nome do arquivo");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1.setText("       Digite um nome para o arquivo!");
 
         jButton1.setText("Exportar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Voltar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -48,26 +66,37 @@ public class TelaExportar extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(155, 155, 155)
-                        .addComponent(jLabel1))
+                        .addGap(158, 158, 158)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(recebeNomeDoArquivo, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(159, 159, 159)
-                        .addComponent(jButton1)))
-                .addContainerGap(149, Short.MAX_VALUE))
+                        .addGap(68, 68, 68)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(recebeNomeDoArquivo)
+                            .addComponent(baraDePr, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                            .addComponent(lblCarregando, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(recebeNomeDoArquivo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(recebeNomeDoArquivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addGap(18, 18, 18)
+                .addComponent(baraDePr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblCarregando)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -75,17 +104,50 @@ public class TelaExportar extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String nomeDoArquivo = recebeNomeDoArquivo.getText();
-        
+        String nomeDoArquivo = recebeNomeDoArquivo.getText() + ".txt";
+        try {
+            colecao.exportarMidias(nomeDoArquivo);
+            new Thread() {
+                public void run() {
+                    for (int i = 0; i < 101; i++) {
+                        try {
+                            sleep(40);
+                            baraDePr.setValue(i);
+                            if (baraDePr.getValue() <= 25) {
+                                lblCarregando.setText("Solicitando os dados...");
+                            } else if (baraDePr.getValue() <= 50) {
+                                lblCarregando.setText("Lendo...");
+                            } else if (baraDePr.getValue() <= 75) {
+                                lblCarregando.setText("Armazenando...");
+                            } else {
+                                lblCarregando.setText("Arquivo exportado com sucesso!");
+                            }
+                        } catch (InterruptedException ex) {
+
+                        }
+                    }
+                }
+            }.start();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JProgressBar baraDePr;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblCarregando;
     private javax.swing.JTextField recebeNomeDoArquivo;
     // End of variables declaration//GEN-END:variables
 }
