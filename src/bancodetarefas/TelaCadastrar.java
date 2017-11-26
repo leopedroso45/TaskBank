@@ -5,7 +5,7 @@
  */
 package bancodetarefas;
 
-import static java.lang.Thread.sleep;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -154,10 +154,11 @@ public class TelaCadastrar extends javax.swing.JFrame {
         String caminho = recebeCaminho.getText();
         try {
             this.colecao.addTarefa(new Tarefa(nome, descricao, genero, caminho));
+            JOptionPane.showMessageDialog(null, "Tarefa cadastrada com sucesso!");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
+        dispose();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
